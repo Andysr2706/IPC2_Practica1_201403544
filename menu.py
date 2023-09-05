@@ -25,7 +25,8 @@ class Menu:
                 print("-------------------------Coloréalo-------------------------")
                 print("1. Crear Tablero.")
                 print("2. Agregar piezas.")
-                print("3. Salir.\n")
+                print("3. Datos del estudiante.")
+                print("4. salir.\n")
                 print("-------------------------Guatematel-------------------------")
                 SeleccionMenu = int(input())
 
@@ -34,6 +35,7 @@ class Menu:
                     print("------------------------------------------------------------")
                     print('')
                     print("Por favor ingrese el ancho del tablero. ")
+                    Menu.ListaPieza.cabeza = None
                     Menu.AnchoTablero = int(input())
                     print('')
                     print("------------------------------------------------------------")
@@ -72,18 +74,18 @@ class Menu:
                         print('')
                         print(ColorPieza + ': ')
                         print("Por favor ingrese la fila en la que desea colocar la pieza. ")
-                        print("Rango: 1 - " + str(Menu.AnchoTablero))
+                        print("Rango: 1 - " + str(Menu.AlturaTablero))
                         FilaPieza = int(input())
                         print('')
                         print("------------------------------------------------------------")
                         print('')
                         print("Por favor ingrese la columna en la que desea colocar la pieza. ")
-                        print("Rango: 1 - " + str(Menu.AlturaTablero))
+                        print("Rango: 1 - " + str(Menu.AnchoTablero))
                         ColumnaPieza = int(input())
                         print('')
                         print("------------------------------------------------------------")
                         print('')
-                        print('Pieza Color: ' + ColorPieza + ', Fila: ' +str(FilaPieza) +', Columna: ' +str(ColumnaPieza))
+                        print('Pieza Color: ' + ColorPieza + ', Fila: ' +str(FilaPieza) +', Columna: ' +str(ColumnaPieza)+' Agregada exitosamente.')
                         
                         if(ColorPieza == 'AZUL'):
                             ColorPiezaA = 'A'
@@ -104,9 +106,6 @@ class Menu:
 
                         print('')
                         print("------------------------------------------------------------")
-                        print('')
-                        print('Pieza agregada Exitosamente.')
-                        print("------------------------------------------------------------")
                         print('Tablero actual: ')
                         print("")
 
@@ -119,7 +118,7 @@ class Menu:
 
                         while CondicionImpresion:
                             columnaactual = 1
-                            for columnaactual in range(1, Menu.AlturaTablero + 1):
+                            for columnaactual in range(1, Menu.AnchoTablero + 1):
                                 if NodoAuxiliar != None:
                                     if(NodoAuxiliar.dato.fila == filaactual and NodoAuxiliar.dato.columna == columnaactual):
 
@@ -131,17 +130,17 @@ class Menu:
                                             NodoAuxiliar = NodoAuxiliar.siguiente
                                     elif columnaactual ==1:
                                         filatablero = '|   | '
-                                    elif columnaactual < Menu.AlturaTablero:
+                                    elif columnaactual < Menu.AnchoTablero:
                                         filatablero = filatablero + '  | '
-                                    elif columnaactual == Menu.AlturaTablero:
+                                    elif columnaactual == Menu.AnchoTablero:
                                         filatablero =filatablero + '  |'
 
 
                                 elif columnaactual == 1:
                                     filatablero = '|   | '
-                                elif columnaactual < Menu.AlturaTablero:
+                                elif columnaactual < Menu.AnchoTablero:
                                     filatablero = filatablero + '  | '
-                                elif columnaactual == Menu.AlturaTablero:
+                                elif columnaactual == Menu.AnchoTablero:
                                     filatablero =filatablero + '  |'
                                 
                             
@@ -157,14 +156,14 @@ class Menu:
                             filatablero = ''
                             
 
-                            if   filaactual == Menu.AnchoTablero and columnaactual == Menu.AlturaTablero:
+                            if   filaactual == Menu.AlturaTablero and columnaactual == Menu.AnchoTablero:
                                 CondicionImpresion = False
 
                             filaactual = filaactual + 1
 
                         print("------------------------------------------------------------")
                         print("")
-                        print('Desea agregar mas piezas?. s/n')
+                        print('Desea agregar mas piezas?. S/N')
                         decision = str(input())
                         if(decision == 'S'):
                             CondicionPieza = True
@@ -176,8 +175,18 @@ class Menu:
                             print("------------------------------------------------------------")
                             print('')
                             print('Generando Grafica: ')
+                            Menu.graficarMuestra(Menu.ListaPieza.cabeza)
 
                 if SeleccionMenu == 3:
+                    print('')
+                    print("------------------------------------------------------------")
+                    print('Nombre Estudiante: Andy Jeferson Salas Ramirez')
+                    print('Carnet: 201403544')
+                    print('Curso: Iroduccion a la Programacion y Computacion 2 Seccion A')
+                    print("------------------------------------------------------------")
+                    print('')
+                    
+                if SeleccionMenu == 4:
                     sys.exit()
 
     def ordenarListaElementos(cabeza):
@@ -238,4 +247,82 @@ class Menu:
             
         cabeza = nodolista.siguiente
 
-        return cabeza    
+        return cabeza
+    
+
+    def graficarMuestra(cabezadelista):
+
+            x          = Menu.AnchoTablero
+            y          = Menu.AlturaTablero
+            NodoActual = cabezadelista
+            nodotemporal  = ListaSimple.Nodo(None)
+
+            
+            f = graphviz.Digraph('prueba', filename='prueba.gv')
+
+            f.attr('node', shape= 'circle', size= '1', style = 'filled')
+
+            f.node('titulo', 'Coloréalo', fillcolor = 'white')
+
+            fila = 0
+
+            for n in range(x+1):
+                ModuloActual = 'ND'+str(fila) +str(n)
+                f.node(ModuloActual, str(n), fillcolor = 'white')
+                f.edge('titulo', ModuloActual)
+
+            ModuloAnterior = 'ND00'
+            columna = 0
+            for n in range(1, y+1):
+                ModuloActual = 'ND'+str(n) +str(columna)
+                f.node(ModuloActual, str(n), fillcolor = 'white')
+                f.edge(ModuloAnterior, ModuloActual)
+                ModuloAnterior = ModuloActual
+                
+
+            for filaactual in range(y):
+                columnaactual = 1
+                ModuloAnterior = 'ND' + str(filaactual)+str(columnaactual)
+                
+                filaactual = filaactual +1
+
+                for columnaactual in range (1, x+1):
+                    ModuloActual = 'ND' +str(filaactual)+ str(columnaactual)
+
+                    if NodoActual !=None:
+
+                        if NodoActual.dato.fila == filaactual and NodoActual.dato.columna == columnaactual:
+                            color = ''
+                            if NodoActual.dato.colorA =='A':
+                                color = 'steelblue1'
+                            elif NodoActual.dato.colorA =='R':
+                                color = 'red'
+                            elif NodoActual.dato.colorA =='V':
+                                color = 'limegreen'
+                            elif NodoActual.dato.colorA =='P':
+                                color = 'darkorchid3'
+                            elif NodoActual.dato.colorA =='N':
+                                color = 'orange'
+
+                            f.node(ModuloActual, str(NodoActual.dato.colorA), fillcolor = color)
+                            ModuloAnterior = 'ND'+ str(filaactual-1) + str(columnaactual)
+                            f.edge(ModuloAnterior, ModuloActual)
+                            NodoActual = NodoActual.siguiente
+                        else:
+                            f.node(ModuloActual, '', fillcolor = 'white')
+                            ModuloAnterior = 'ND'+ str(filaactual-1) +str(columnaactual)
+                            f.edge(ModuloAnterior, ModuloActual)
+
+                    else:
+                        f.node(ModuloActual, '', fillcolor = 'white')
+                        ModuloAnterior = 'ND'+ str(filaactual-1) +str(columnaactual)
+                        f.edge(ModuloAnterior, ModuloActual)
+                            
+
+
+
+
+
+           
+            f.render('./renders/prueba.gv', view=True)
+        
